@@ -3,13 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
     "start": "node server.js",
-    "build": "ng build",
-    "postinstall": "ng build --aot -prod",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "postinstall": "ng build --aot -prod"
   },
   "engines": {
     "node": "9.3.0",
@@ -18,7 +13,6 @@
   "private": true,
   "dependencies": {
     "@angular/cli": "^1.6.2",
-    "@angular/compiler-cli": "^5.1.2",
     "@agm/core": "^1.0.0-beta.2",
     "@agm/snazzy-info-window": "^1.0.0-beta.2",
     "@angular/animations": "^4.2.4",
