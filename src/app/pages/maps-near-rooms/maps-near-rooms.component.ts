@@ -70,20 +70,21 @@ export class MapsNearRoomsComponent implements OnInit {
   }
 
   loadmap(){
-    this.zoom = 4;
+    this.zoom = 11;
     this.latitude = 10.821581049913508;
     this.longitude = 106.78939990781248;
-    this.destinationOutput = new FormControl();
-    this.setCurrentPosition();
-    this.mapsAPILoader.load().then(() => {
-      let autocompleteOutput = new google.maps.places.Autocomplete(this.pickupOutputElementRef.nativeElement, {types: ["address"]});
-      this.setupPlaceChangedListener(autocompleteOutput);
-      });
+    // this.destinationOutput = new FormControl();
+    // this.setCurrentPosition();
+    // this.mapsAPILoader.load().then(() => {
+      // let autocompleteOutput = new google.maps.places.Autocomplete(this.pickupOutputElementRef.nativeElement, {types: ["address"]});
+      // this.setupPlaceChangedListener(autocompleteOutput);
+      // });
   }
 
 
   selectpoint(point:point){
     this.selectedpoint = point;
+    this.zoom = 15;
     this.cars = [];
     if(this.selectedpoint.status == 0){
       var geocoder = new google.maps.Geocoder();
@@ -95,7 +96,6 @@ export class MapsNearRoomsComponent implements OnInit {
           this.selectedpoint.status = 1;
           this.addToast("success","Tự động xác định toạn độ thành công","("+this.latitude+"+"+this.longitude);
         }else{
-          console.log("fuck");
           this.addToast("warning","Tự động xác định toạn độ không thành công, vùi lòng tìm bằng tay","("+this.latitude+"+"+this.longitude);
         }
       });
@@ -117,6 +117,22 @@ export class MapsNearRoomsComponent implements OnInit {
       this.cars.push(car);
       this.loadDirect(car);
     }
+  }
+
+  search(){
+    var geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: this.selectedpoint.address }, (results, status) => {
+        if(status == "OK"){
+          var Geocode  = new geocode();
+          this.latitude = this.selectedpoint.latitude =  results[0].geometry.location.lat();
+          this.longitude = this.selectedpoint.longitude = results[0].geometry.location.lng();
+          this.selectedpoint.status = 1;
+          this.vc.clearDirections();
+          this.addToast("success","Tự động xác định toạn độ thành công","("+this.latitude+"+"+this.longitude);
+        }else{
+          this.addToast("warning","Tự động xác định toạn độ không thành công, vùi lòng tìm bằng tay","("+this.latitude+"+"+this.longitude);
+        }
+      });
   }
 
   addToast(type:string,title:string,mgs:string) {
@@ -169,24 +185,24 @@ export class MapsNearRoomsComponent implements OnInit {
     // this.addToast("success","Cập nhật toạn độ thành công","("+this.latitude+"+"+this.longitude);
   }
 
-  private setupPlaceChangedListener(autocomplete : any) {
-    autocomplete.addListener("place_changed", () => {
-      this.ngZone.run(() => {
-          let place : google.maps.places.PlaceResult = autocomplete.getPlace();
-          if (place.geometry === undefined) {
-            return;
-          }
-          this.latitude = place.geometry.location.lat();
-          this.longitude = place.geometry.location.lng();
-          if(this.selectedpoint){
-            this.selectedpoint.latitude = place.geometry.location.lat();
-            this.selectedpoint.longitude = place.geometry.location.lng();
-            this.selectedpoint.address = place.formatted_address;
-          }
-        });
-    });
+  // private setupPlaceChangedListener(autocomplete : any) {
+  //   autocomplete.addListener("place_changed", () => {
+  //     this.ngZone.run(() => {
+  //         let place : google.maps.places.PlaceResult = autocomplete.getPlace();
+  //         if (place.geometry === undefined) {
+  //           return;
+  //         }
+  //         this.latitude = place.geometry.location.lat();
+  //         this.longitude = place.geometry.location.lng();
+  //         if(this.selectedpoint){
+  //           this.selectedpoint.latitude = place.geometry.location.lat();
+  //           this.selectedpoint.longitude = place.geometry.location.lng();
+  //           this.selectedpoint.address = place.formatted_address;
+  //         }
+  //       });
+  //   });
 
-  }
+  // }
 
   private setCurrentPosition() {
     if ("geolocation" in navigator) {

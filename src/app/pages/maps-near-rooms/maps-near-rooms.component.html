@@ -61,17 +61,20 @@
   </div>
   <div class="col-md-10 no-padding">
     <div>
-      <form #locForm="ngForm">
-        <div class="input-group">
-          <span class="input-group-addon">
-            <i class="fa fa-map-marker" aria-hidden="true"></i>
-          </span>
-          <div class="form-group">
-            <input placeholder="Enter destination" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control col"
-              #pickupOutput [formControl]="destinationOutput">
+      <div *ngIf="selectedpoint">
+        <form (ngSubmit)="search()">
+          <div class="input-group">
+            <span class="input-group-addon">
+                <button type="submit" style="border:none;background:none"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </span>
+            <div class="form-group">
+              <!-- <input placeholder="Search address" [(ngModel)]="selectedpoint.address"  type="text" class="form-control col"> -->
+              <input type="text" class="form-control" name="address" placeholder="Enter point address" [(ngModel)]="selectedpoint.address"
+                #address="ngModel">
+              </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
     <sebm-google-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
       <div *ngIf="selectedpoint">
